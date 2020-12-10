@@ -1,0 +1,48 @@
+<form class="form-horizontal" method="POST" action="/modifyBooking/">
+    {% csrf_token %}
+    <input type="hidden" class="form-control" placeholder="" name="booking_id" v-model="booking.booking_id" readonly>
+
+    <div class="row">
+        <div class="form-group col-6">
+            <label>First Name</label>
+            <input type="text" class="form-control" placeholder="" name="first_name" v-model="booking.first_name" readonly>
+        </div>
+        <div class="form-group col-6">
+            <label>Last Name</label>
+            <input type="text" class="form-control" placeholder="" name="last_name" v-model="booking.last_name" readonly>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-6">
+            <label>Driver's License</label>
+            <input type="text" class="form-control" placeholder="" name="driving_license" v-model="booking.driving_license" readonly>
+        </div>
+        <div class="form-group col-6">
+            <label>Vehicle</label>
+            <select class="form-control" name="license_plate" required>
+                <option value="" selected>Select A Vehicle</option>
+                <option v-for="car in catalog" :value="car.license_plate">[[ car.brand ]] [[ car.model ]] - [[
+                    car.type]] ([[ car.color ]])
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-6">
+            <label>Start Date</label>
+            <input type="date" class="form-control" name="start_date" v-model="booking.startDate" required>
+        </div>
+
+        <div class="form-group col-6">
+            <label>End Date</label>
+            <input type="date" class="form-control" name="end_date" v-model="booking.endDate" :min="booking.startDate" required>
+        </div>
+    </div>
+    <hr>
+    <div class="float-right">
+        <button type="submit" class="btn btn-success">Update Booking</button>
+        <a :href="'/view-booking-details?booking_id='+booking.booking_id" class="btn btn-light">Cancel</a>
+    </div>
+</form>

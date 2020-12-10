@@ -1,0 +1,57 @@
+{% extends "app-layout.html" %}
+
+{% block title %}Create Customer{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>Edit Customer</b>
+                </div>
+                <div class="card-body">
+                    {% include "partials/edit-customer-form.html" %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+    <script>
+        var app = new Vue({
+            el: '#app',
+            mounted() {
+                let driversLicenseMask = IMask(document.getElementById('drivers-license'), {
+                    mask: '#-0000-000000-00',
+                    definitions: {
+                        '#': /[a-zA-Z]/
+                    },
+                    prepare: function (str) {
+                        return str.toUpperCase();
+                    }
+                })
+            },
+            data() {
+                return {
+                    customer: {{ customer|safe }}
+                }
+            },
+            methods: {}
+        });
+
+        function makeid() {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for (var i = 0; i < 5; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            return text;
+        }
+
+        window.onload = function () {
+            document.getElementById("userToken").value = makeid();
+        }
+
+    </script>
+{% endblock %}

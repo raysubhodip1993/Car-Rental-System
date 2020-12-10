@@ -1,0 +1,82 @@
+{% extends "app-layout.html" %}
+
+{% block title %}View Reservations{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p><strong>Filter Table</strong></p>
+                    {% include "partials/filter-bookings-form.html" %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>View Reservations</b>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center" scope="col">#</th>
+                                <th scope="col">Customer Name</th>
+                                <th scope="col">Vehicle</th>
+                                <th scope="col">Duration</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template v-if="filteredBookings != null">
+                                <tr v-for="booking in filteredBookings">
+                                    <td class="text-center">[[ booking.booking_id ]]</td>
+                                    <td>[[ booking.first_name ]] [[ booking.last_name ]]</td>
+                                    <td>[[ booking.license_plate ]]</td>
+                                    <td>[[ booking.start_date ]] - [[ booking.end_date ]]</td>
+                                    <td>[[ booking.booking_status ]]</td>
+                                    <td class="w-25">
+                                        <a :href="'/view-reservation-details/?booking_id='+booking.booking_id" class="btn btn-sm btn-light">View Details</a>
+                                    </td>
+                                </tr>
+                            </template>
+                            <tr v-else>
+                                <td class="text-center" colspan="6">No Reservations Created</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+<script>
+    var app = new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app',
+        mounted() {
+            {#let driversLicenseMask = IMask(document.getElementById('licence-plate'), {#}
+            {#    mask: '### ###',#}
+            {#    definitions: {#}
+            {#        '#': /[a-zA-z0-9]/#}
+            {#    },#}
+            {#    prepare: function (str) {#}
+            {#        return str.toUpperCase();#}
+            {#    }#}
+            {#})#}
+        },
+        data() {
+            return {
+                filteredBookings: {{ bookings|safe }},
+                bookings: {{ bookings|safe }},
+            }
+        },
+        methods: {
+
+        }
+    });
+</script>
+{% endblock %}

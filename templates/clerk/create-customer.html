@@ -1,0 +1,44 @@
+{% extends "app-layout.html" %}
+
+{% block title %}Create Customer{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>Create Customer</b>
+                </div>
+                <div class="card-body">
+                    {% include "partials/create-customer-form.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+<script>
+    var app = new Vue({
+        el: '#app',
+        mounted() {
+            let driversLicenseMask = IMask(document.getElementById('drivers-license'), {
+                mask: '#-0000-000000-00',
+                definitions: {
+                    '#': /[a-zA-Z]/
+                },
+                prepare: function (str) {
+                    return str.toUpperCase();
+                }
+            })
+        },
+        data() {
+            return {
+
+            }
+        },
+        methods: {
+
+        }
+    });
+</script>
+{% endblock %}

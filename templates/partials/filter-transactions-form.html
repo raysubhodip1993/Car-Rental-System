@@ -1,0 +1,45 @@
+<form class="form-horizontal m-t-20" v-on:submit.prevent="reset()" method="POST" action="/filter-transaction/">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label>Client</label>
+        <input type="text" v-model="filterForm.client" class="form-control" placeholder="Enter Client Name"/>
+    </div>
+
+    <div class="form-group">
+        <label>Vehicle</label>
+        <select class="custom-select" v-model="filterForm.brand">
+              <option value="" selected disabled>Select Vehicle</option>
+            <option v-for="(count, key) in fbrand" :value="key" v-bind:key="key">[[ key ]] ([[ count ]])</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Booking ID</label>
+        <input type="date" v-model="filterForm.bookingId" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+        <label>Due Date</label>
+          <input type="date" v-model="filterForm.dueDate" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+        <label>Return Date</label>
+          <input type="date" v-model="filterForm.returnDate" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+        <label>Status</label>
+        <select class="custom-select" v-model="filterForm.status">
+              <option value="" selected disabled>Select A Status</option>
+              <option v-for="(count, key) in fstatus" :value="key" v-bind:key="key">[[ key ]] ([[ count ]])</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-0">
+        <button type="submit" class="btn btn-secondary btn-block">
+            Reset
+        </button>
+    </div>
+</form>

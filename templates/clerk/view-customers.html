@@ -1,0 +1,96 @@
+{% extends "app-layout.html" %}
+
+{% block title %}View Customers{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p><strong>Filter Table</strong></p>
+                    {% include "partials/filter-customers-form.html" %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>View Customers</b>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Phone Number</th>
+                                <th scope="col">Driver's License</th>
+                                <th scope="col">Expiration Date</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template v-if="filteredCustomers.length !== 0">
+                                <tr v-for="customer in filteredCustomers">
+                                    <td>[[ customer.first_name ]] [[ customer.last_name ]]</td>
+                                    <td>[[ customer.phone_no ]]</td>
+                                    <td>[[ customer.driving_license ]]</td>
+                                    <td>[[ customer.expiry_date ]]</td>
+                                    <td class="w-25">
+                                        <a :href="'/view-customer?driving_license='+customer.driving_license" class="btn btn-sm btn-light">View Customer</a>
+                                    </td>
+                                </tr>
+                            </template>
+                            <tr v-else>
+                                <td class="text-center" colspan="5">No Customers Found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+<script>
+    var app = new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app',
+        mounted() {
+            let driversLicenseMask = IMask(document.getElementById('drivers-license'), {
+                mask: '#-0000-000000-00',
+                definitions: {
+                    '#': /[a-zA-Z]/
+                },
+                prepare: function (str) {
+                    return str.toUpperCase();
+                }
+            })
+        },
+        data() {
+            return {
+                filteredCustomers: {{ customers|safe }},
+                customers: {{ customers|safe }},
+                driving_license: null,
+            }
+        },
+        watch: {
+            driving_license() {
+                this.filter()
+            }
+        },
+        methods: {
+            filter() {
+                let val = this.driving_license
+
+                if (val !== null && val !== "") {
+                    this.filteredCustomers = _.filter(this.customers, function(obj) {
+                        return obj.driving_license.indexOf(val) !== -1;
+                    });
+                } else {
+                    this.filteredCustomers = this.customers;
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

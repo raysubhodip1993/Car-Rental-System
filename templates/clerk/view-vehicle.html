@@ -1,0 +1,67 @@
+{% extends "app-layout.html" %}
+
+{% block title %}View Vehicle{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>Vehicle Details</b>
+                </div>
+                <div class="card-body">
+                    <p>Type: [[ vehicle.currentCar.type ]]</p>
+                    <p>Brand: [[ vehicle.currentCar.brand ]]</p>
+                    <p>Model: [[ vehicle.currentCar.model ]]</p>
+                    <p>Year: [[ vehicle.currentCar.prod_year ]]</p>
+                    <p>Color: [[ vehicle.currentCar.color ]]</p>
+                    <p>Licence plate: [[ vehicle.currentCar.license_plate ]]</p>
+                    <hr>
+                    <p id="bookingStatus">Vehicle Status: [[ vehicle.currentCar.status ]]</p>
+
+                    <div class="float-right">
+                    {% if request.session.user.type == 'c' %}
+                        <a id="finishButton" :href="'/complete-booking?license_plate='+vehicle.currentCar.license_plate"
+                           class="btn btn-warning text-light">Return Vehicle</a>
+                     {% endif %}
+                        {% if request.session.user.type == 'a' %}
+                            <a :href="'/edit-vehicle?license_plate='+vehicle.currentCar.license_plate"
+                               class="btn btn-secondary text-light">Edit</a>
+                            <a :href="'/delete-vehicle?license_plate='+vehicle.currentCar.license_plate"
+                               class="btn btn-danger text-light" onclick="event.preventDefault();
+                                                        document.getElementById('delete-vehicle-form').submit();">Delete</a>
+                        {% endif %}
+                        <form id="delete-vehicle-form" action="/deleteVehicle/" method="POST" style="display: none;">
+                            {% csrf_token %}
+
+
+                            <input name="license_plate" v-model="vehicle.currentCar.license_plate">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <a :href="'/view-vehicle?license='+vehicle.previousCar" class="btn btn-secondary text-light float-left">Previous
+                Vehicle</a>
+            <a :href="'/view-vehicle?license='+vehicle.nextCar" class="btn btn-success text-light float-right">Next
+                Vehicle</a>
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+    <script>
+        var app = new Vue({
+            delimiters: ['[[', ']]'],
+            el: '#app',
+            data() {
+                return {
+                    vehicle: {{ data|safe }}
+                }
+            },
+            methods: {}
+        });
+        if (document.getElementById("bookingStatus").innerHTML == "Vehicle Status: available") {
+            document.getElementById("finishButton").style.visibility = "hidden";
+        }
+    </script>
+{% endblock %}

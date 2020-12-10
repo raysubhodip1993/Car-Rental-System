@@ -1,0 +1,36 @@
+<form class="form-horizontal" method="POST" action="/modifyCust/">
+    {% csrf_token %}
+    <div class="row">
+
+        <div class="form-group col-6">
+            <label>First Name</label>
+            <input type="text" class="form-control" placeholder="Enter Customer's First Name" name="first_name" v-model="customer.first_name" required>
+        </div>
+        <div class="form-group col-6">
+            <label>Last Name</label>
+            <input type="text" class="form-control" placeholder="Enter Customer's Last Name" name="last_name" v-model="customer.last_name" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Phone Number</label>
+        <input type="text" class="form-control" placeholder="Enter Customer's Phone Number" v-model="customer.phone_no" name="phone_no" maxlength="10" required>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-6">
+            <label>Driver's License Number</label>
+            <input type="text" class="form-control" placeholder="Enter Customer's Driver's License Number" v-model="customer.driving_license" name="driving_license" id="drivers-license" readonly>
+        </div>
+
+        <div class="form-group col-6">
+            <label>Expiration Date</label>
+            <input type="date" class="form-control" name="expiry_date" v-model="customer.expiry_date" readonly>
+        </div>
+    </div>
+    <hr>
+    <div class="float-right">
+        <button type="submit" class="btn btn-success">Update Customer</button>
+        <a :href="'/view-customer?driving_license='+customer.driving_license" class="btn btn-light">Cancel</a>
+    </div>
+</form>

@@ -1,0 +1,51 @@
+{% extends "app-layout.html" %}
+
+{% block title %}View Employee{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>Employee Details</b>
+                </div>
+                <div class="card-body">
+                    <p>First Name: [[ employee.currentEmployee.first_name ]]</p>
+                    <p>Last Name: [[ employee.currentEmployee.last_name ]]</p>
+                    <p>Username: [[ employee.currentEmployee.uname ]]</p>
+                    <p>User Type: [[ employee.currentEmployee.type ]]</p>
+                    <p hidden>User Type: [[ employee.currentEmployee.emp_id ]]</p>
+
+                </div>
+            </div>
+            <div class="float-right">
+                <a :href="'/edit-employee?emp_id='+employee.currentEmployee.emp_id" class="btn btn-secondary text-light">Edit</a>
+                <a :href="'/delete-employee?emp_id='+employee.currentEmployee.emp_id" class="btn btn-danger text-light"
+                   onclick="event.preventDefault();
+                                                document.getElementById('delete-employee-form').submit();">Delete</a>
+
+                <form id="delete-employee-form" action="/deleteEmployee/" method="POST" style="display: none;">
+                    {% csrf_token %}
+
+
+                    <input name="emp_id" v-model="employee.currentEmployee.emp_id">
+                </form>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+    <script>
+        var app = new Vue({
+            delimiters: ['[[', ']]'],
+            el: '#app',
+            data() {
+                return {
+                    employee: {{ data|safe }}
+                }
+            },
+            methods: {}
+        });
+    </script>
+{% endblock %}

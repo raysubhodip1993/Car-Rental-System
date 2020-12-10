@@ -1,0 +1,64 @@
+<form class="form-horizontal" method="POST" action="/addBooking/">
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="form-group col-6">
+            <label>First Name</label>
+            <input type="text" class="form-control" placeholder="" name="first_name" v-model="customer.first_name"
+                   readonly>
+        </div>
+        <div class="form-group col-6">
+            <label>Last Name</label>
+            <input type="text" class="form-control" placeholder="" name="last_name" v-model="customer.last_name"
+                   readonly>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-6">
+            <input type="hidden" class="form-control" placeholder="" name="phone_no" v-model="customer.phone_no" readonly>
+        </div>
+        <div class="form-group col-6">
+            <input type="hidden" class="form-control" placeholder="" name="expiry_date"
+                   v-model="customer.expiry_date" readonly>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-6">
+            <label>Driver's License</label>
+            <input type="text" class="form-control" placeholder="" name="driving_license"
+                   v-model="customer.driving_license" readonly>
+        </div>
+        <div class="form-group col-6">
+            <label>Vehicle</label>
+            <select class="form-control" name="license_plate" v-model="license_plate" required>
+                <option value="" selected>Select A Vehicle</option>
+                <option v-for="car in catalog" :value="car.license_plate">[[ car.brand ]] [[ car.model ]] - [[
+                    car.type]] ([[ car.color ]])
+                </option>
+            </select>
+            <div class="invalid-feedback d-block" v-if="carUnavailable">
+              Car has already been selected for another booking.
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="row">
+        <div class="form-group col-6">
+            <label>Start Date</label>
+            <input type="date" class="form-control" name="start_date" v-model="start_date" required>
+        </div>
+
+        <div class="form-group col-6">
+            <label>End Date</label>
+            <input type="date" class="form-control" name="end_date" :min="start_date" required>
+        </div>
+    </div>
+    <hr>
+    <div class="float-right">
+        <button type="submit" class="btn btn-success" :disabled="carUnavailable">Create Booking</button>
+        <a href="/create-booking/" class="btn btn-light">Cancel</a>
+    </div>
+</form>

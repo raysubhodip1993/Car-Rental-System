@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Booking</title>
+</head>
+<body>
+<h1>:: Create Booking/ Rent ::</h1>
+<form action="/createpost/" method="POST">
+    {% csrf_token %}
+    {#carId: <input type="text" name="car"/><br/>#}
+<<<<<<< HEAD
+    id: <input type="text" name="rcarid"/><br/>
+    brand: <input type="text" name="rbrand"/><br/>
+    model: <input type="text" name="rmodel"/><br/>
+    cost: <input type="text" name="rcost"/><br/>
+    phono: <input type="text" name="rphno"/><br/>
+    prod_year: <input type="text" name="rprodYear"/><br/>
+    mileage: <input type="text" name="rmileage"/><br/>
+    color: <input type="text" name="rcolor"/><br/>
+    bookingStatus: <input type="text" name="rbookingStatus"/><br/>
+=======
+    id: <input type="text" name="carid"/><br/>
+    brand: <input type="text" name="brand"/><br/>
+    model: <input type="text" name="model"/><br/>
+    prod_year: <input type="text" name="prod_year"/><br/>
+    mileage: <input type="text" name="mileage"/><br/>
+    color: <input type="text" name="color"/><br/>
+    bookingStatus: <input type="text" name="bookingStatus"/><br/>
+>>>>>>> 41608f783b30e4869c15f470c9a834f47ff284b3
+
+    <input type="submit" value="Post"/>
+</form>
+</body>
+</html>

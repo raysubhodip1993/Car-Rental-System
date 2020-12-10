@@ -1,0 +1,52 @@
+{% extends "app-layout.html" %}
+
+{% block title %}View Customer{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>Customer Details</b>
+                </div>
+                <div class="card-body">
+                    <p>First Name: [[ data.currentCustomer.first_name ]]</p>
+                    <p>Last Name: [[ data.currentCustomer.last_name ]]</p>
+                    <p>Driver's License No: [[ data.currentCustomer.driving_license ]]</p>
+                    <p>License Expiry: [[ data.currentCustomer.expiry_date ]]</p>
+                    <p>Phone Number: [[ data.currentCustomer.phone_no ]]</p>
+                    <hr>
+                    <p>Booking: [[ data.currentCustomer.status ]]</p>
+                </div>
+            </div>
+            <div class="float-right">
+                <a :href="'/edit-customer?driving_license='+data.currentCustomer.driving_license" class="btn btn-secondary text-light">Edit</a>
+                <a :href="'/delete-customer?driving_license='+data.currentCustomer.driving_licencedriving_licence" class="btn btn-danger text-light" onclick="event.preventDefault();
+                                                document.getElementById('delete-customer-form').submit();">Delete</a>
+
+                <form id="delete-customer-form" action="/deleteCust/" method="POST" style="display: none;">
+                    {% csrf_token %}
+
+                    <input name="driving_license" v-model="data.currentCustomer.driving_license">
+                </form>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+<script>
+    var app = new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app',
+        data() {
+            return {
+                data: {{ data|safe }}
+            }
+        },
+        methods: {
+
+        }
+    });
+</script>
+{% endblock %}

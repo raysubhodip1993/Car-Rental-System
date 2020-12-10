@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="">
+    <!-- {% csrf_token %} -->
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Scripts -->
+    <script src="{% static "public/js/app.js" %}" defer></script>
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    <!-- Styles -->
+    <link href="{% static "public/css/app.css" %}" rel="stylesheet">
+</head>
+<body>
+<h2>Enter Customer Details</h2>
+
+<form action="/modifyCust/" method='POST'>
+    {% csrf_token %}
+  First name:<br>
+  <input type="text" name="firstname" required="true" >
+  <br>
+  Last name:<br>
+  <input type="text" name="lastname" required="true">
+  <br>
+    Phone Number:<br>
+  <input type="text" name="phone_no" required="true" >
+  <br>
+    Date of Birth:<br>
+  <input type="text" name="dob" required="true">
+  <br>
+    Driving License Number:<br>
+  <input type="text" name="driving_license" required="true">
+  <br><br>
+  <input type="submit" value="Submit">
+</form>
+</body>
+</html>

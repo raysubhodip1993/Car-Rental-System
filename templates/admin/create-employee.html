@@ -1,0 +1,43 @@
+{% extends "app-layout.html" %}
+
+{% block title %}Create Employee{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>Create Employee</b>
+                </div>
+                <div class="card-body">
+                    {% include "partials/create-employee-form.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+<script>
+    var app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                characterData: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789![]{}()%&*$#^<>~@|',
+                size: 8,
+                password: '',
+            }
+        },
+        methods: {
+            generatePassword() {
+                let password = '';
+
+                for(let i=0; i < this.size; i++) {
+                    password += this.characterData.charAt(Math.floor(Math.random() * this.characterData.length));
+                }
+
+                this.password = password
+            }
+        }
+    });
+</script>
+{% endblock %}

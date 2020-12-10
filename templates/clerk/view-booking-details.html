@@ -1,0 +1,58 @@
+{% extends "app-layout.html" %}
+
+{% block title %}View Booking{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>Booking Details</b>
+                </div>
+                <div class="card-body">
+                    <p>Booking ID: [[ booking.booking_id ]]</p>
+                    <p>Customer Name: [[ booking.first_name]] [[ booking.last_name]]</p>
+                    <p>Driver's License No: [[ booking.driving_license ]]</p>
+                    <p>Duration: [[ booking.start_date ]] - [[ booking.end_date ]]</p>
+                    <hr>
+                    <p>Vehicle License Plate: [[ booking.license_plate ]]</p>
+                    <p id="bookingStatus">Status: [[ booking.booking_status ]]</p>
+                </div>
+            </div>
+            <div class="float-right">
+
+                <a id="editButton" :href="'/modify-booking?booking_id='+booking.booking_id"
+                   class="btn btn-secondary text-light">Edit</a>
+                <a id="finishButton" :href="'/complete-booking?booking_id='+booking.booking_id"
+                   class="btn btn-warning text-light">Initiate Return</a>
+                <a :href="'/delete-booking?booking_id='+booking.booking_id" class="btn btn-danger text-light" onclick="event.preventDefault();
+                                                document.getElementById('delete-booking-form').submit();">Delete</a>
+                <form id="delete-booking-form" action="/deleteBooking/" method="POST" style="display: none;">
+                    {% csrf_token %}
+
+                    <input name="booking_id" v-model="booking.booking_id">
+                </form>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+    <script>
+        var app = new Vue({
+            delimiters: ['[[', ']]'],
+            el: '#app',
+            data() {
+                return {
+                    booking: {{ booking|safe }}
+                }
+            },
+            methods: {}
+        });
+        console.log(document.getElementById("bookingStatus").innerHTML)
+        if (document.getElementById("bookingStatus").innerHTML == "Status: finish") {
+            document.getElementById("editButton").style.visibility = "hidden";
+            document.getElementById("finishButton").style.visibility = "hidden";
+        }
+    </script>
+{% endblock %}

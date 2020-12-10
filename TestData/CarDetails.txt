@@ -1,0 +1,5 @@
+SUV~Jeep~Wrangler~2018~Black~ABC 468
+SUV~Audi~Q5~2016~Blue~DEF 468
+Hatchback~Hyundai~i20~2016~Grey~IJK 468
+Sedan~Mercedes~s6~2018~Grey~LMN 468
+Sedan~Toyota~Corolla~2019~Black~OPQ 568

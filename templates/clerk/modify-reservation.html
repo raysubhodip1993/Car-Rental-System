@@ -1,0 +1,35 @@
+{% extends "app-layout.html" %}
+
+{% block title %}Modify Reservation{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>Modify Reservation</b>
+                </div>
+                <div class="card-body">
+                    {% include "partials/modify-reservation-form.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+<script>
+    var app = new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app',
+        data() {
+            return {
+                booking: {{ data.booking|safe }},
+                catalog: {{ data.cars|safe }}
+            }
+        },
+        methods: {
+
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends "app-layout.html" %}
+
+{% block title %}View Catalog{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p><strong>Filter By Data</strong></p>
+
+                    {#                    {% include "partials/filter-catalog-form.html" %}#}
+                    <form>
+                        <label>Search by Client Name:</label>
+                        <input type="text" onkeyup="myFunction()" id="clientName" class="form-control">
+                        <hr>
+
+                        <label>Search by Client DL No.:</label>
+                        <input type="text" onkeyup="myFunction1()" id="clientNo" class="form-control">
+                        <hr>
+
+                        <label>Search by Car Make:</label>
+                        <input type="text" onkeyup="myFunction2()" id="carMake" class="form-control">
+                        <hr>
+
+                        <label>Search by Due Date: [yyyy-mm-dd]</label>
+                        <input type="text" onkeyup="myFunction3()" id="dueDate" class="form-control">
+                        <hr>
+
+                        <label>Search by Status:</label>
+                        <input type="text" onkeyup="myFunction4()" id="status" class="form-control">
+                        <hr>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>View Catalog</b>
+                </div>
+                <div class="card-body p-0">
+                    <table id="table1" class="table table-sm">
+                        <thead>
+                        <tr>
+                            <th scope="col">Client</th>
+                            <th scope="col">Driving License</th>
+                            <th scope="col">Vehicle</th>
+                            <th scope="col">Booking ID</th>
+                            <th scope="col">Time Of Issue</th>
+                            <th scope="col">Due Date</th>
+{#                            <th scope="col">Return Date</th>#}
+                            <th scope="col">Status</th>
+
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for booking in bookings %}
+                            <tr>
+                                <td>{{ booking.first_name }} {{ booking.last_name }}</td>
+                                <td>{{ booking.driving_license }}</td>
+                                <td>{{ booking.brand }} {{ booking.model }}</td>
+                                <td>{{ booking.booking_id }}</td>
+                                <td>{{ booking.start_date }} {{ booking.issueTime }}</td>
+                                <td>{{ booking.end_date }}</td>
+{#                                <td>{{ booking.returnTime }}</td>#}
+                                <td>{{ booking.booking_status }}</td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+    <script>
+        function myFunction() {
+            document.getElementById("clientNo").value = "";
+            document.getElementById("carMake").value = "";
+            document.getElementById("dueDate").value = "";
+            document.getElementById("status").value = "";
+
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("clientName");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("table1");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        function myFunction1() {
+            document.getElementById("clientName").value = "";
+            document.getElementById("carMake").value = "";
+            document.getElementById("dueDate").value = "";
+            document.getElementById("status").value = "";
+
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("clientNo");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("table1");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        function myFunction2() {
+            document.getElementById("clientName").value = "";
+            document.getElementById("clientNo").value = "";
+            document.getElementById("dueDate").value = "";
+            document.getElementById("status").value = "";
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("carMake");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("table1");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[2];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        function myFunction3() {
+            document.getElementById("clientName").value = "";
+            document.getElementById("clientNo").value = "";
+            document.getElementById("carMake").value = "";
+            document.getElementById("status").value = "";
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("dueDate");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("table1");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[5];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+
+        function myFunction4() {
+            document.getElementById("clientName").value = "";
+            document.getElementById("clientNo").value = "";
+            document.getElementById("carMake").value = "";
+            document.getElementById("dueDate").value = "";
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("status");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("table1");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[6];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+{% endblock %}

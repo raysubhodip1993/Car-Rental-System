@@ -1,0 +1,9 @@
+Browser Started,Pass
+Goto to http://127.0.0.1:8000/ ,Pass
+Test For :-  ,ADMINISTRATOR
+Login,Pass
+Click on Link - Create Employee,Pass
+Create Employee Link,Pass
+Edit Employee Link Works? ,Pass
+Create Employee Function,Pass
+File Close,Pass

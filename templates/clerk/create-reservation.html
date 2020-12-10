@@ -1,0 +1,154 @@
+{% extends "app-layout.html" %}
+{% block title %}Create Reservation{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <form v-on:submit.prevent="searchCustomer()">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Enter Customer's Driver's License Number" v-model="searchParam" required>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="alert alert-light alert-dismissible fade show border" role="alert" v-if="!search.inProgress && !search.found && !createCustomer">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="reset()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            No Customer found matching your search <span class="font-weight-bold">"[[ searchParam ]]"</span>.
+            <hr>
+            Click on the button to create a new customer. <button class="btn btn-success btn-sm" v-on:click="createCustomer = !createCustomer">Create</button>
+        </div>
+
+        <div class="card mb-3" v-if="createCustomer">
+            <div class="card-header bg-white">
+                <b>Create Customer</b>
+            </div>
+            <div class="card-body">
+                <form class="form-horizontal" v-on:submit.prevent="createCust()" id="create-customer-form"  method="POST" action="/createCust/">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" placeholder="Enter Customer's First Name" name="first_name" required>
+                        </div>
+                        <div class="form-group col-6">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" placeholder="Enter Customer's Last Name" name="last_name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" class="form-control" placeholder="Enter Customer's Phone Number" name="phone_no" maxlength="10" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label>Driver's License Number</label>
+                            <input type="text" class="form-control" placeholder="Enter Customer's Driver's License Number" name="driving_license" required>
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label>Expiration Date</label>
+                            <input type="date" class="form-control" name="expiry_date" required>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="float-right">
+                        <button type="submit" class="btn btn-success">Create Customer</button>
+                        <button type="reset" class="btn btn-light">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mb-3" v-if="createBooking">
+            <div class="card-header bg-white">
+                <b>Create Reservation</b>
+            </div>
+            <div class="card-body">
+                {% include "partials/create-reservation-form.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block vue %}
+<script>
+    var app = new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app',
+        data() {
+            return {
+                createCustomer: false,
+                createBooking: false,
+                search: {
+                    inProgress: true,
+                    found: false,
+                },
+                searchParam: "",
+                start_date: null,
+                customer: null,
+                catalog: {{ cars|safe }},
+                totalCost: 100.00
+            }
+        },
+        watch: {
+            searchParam(val) {
+                this.reset()
+            },
+            'search.found'(val) {
+                this.createCustomer = (!val) ? true : false;
+                this.createBooking = (val) ? true : false;
+            }
+        },
+        methods: {
+            searchCustomer() {
+                axios.get('/findCust/', {
+                    params: {
+                      driving_license: this.searchParam
+                    }
+                  }).then((response) => {
+                    this.booking(response.data)
+                  }).catch((error) => {
+                    this.search.inProgress = false
+                    this.search.found = false
+                  });
+            },
+            createCust() {
+                let customer = { }
+
+                $.each($('#create-customer-form').serializeArray(), function() {
+                    customer[this.name] = this.value;
+                });
+
+                this.booking({found:true, customer: customer})
+
+                axios.post('/createCust/', $('#create-customer-form').serialize())
+            },
+            booking(data) {
+                this.search.inProgress = false
+
+                if(data.found) {
+                    this.search.found = true
+
+                    this.customer = data.customer
+                } else {
+                    this.search.found = false
+                }
+            },
+            reset() {
+                this.search.inProgress = true,
+                this.search.found = false,
+                this.createCustomer = false,
+                this.createBooking = false
+            }
+        }
+    });
+</script>
+{% endblock %}
+

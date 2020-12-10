@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="e" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="">
+    <!-- {% csrf_token %} -->
+    <title>Rent A Car.com -  Login</title>
+
+    <!-- Scripts -->
+    <script src="{% static 'public/js/app.js' %}"></script>
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    <!-- Styles -->
+    <link href="{% static 'public/css/app.css' %}" rel="stylesheet">
+</head>
+<body>
+
+
+<div class="container">
+    <div class="row justify-content-center login-wrapper">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header " style="background-color: #1b4b72; color: white">
+                    <b> One Stop Car Rental Services</b>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-sm-6" style="display:table-cell; vertical-align:middle; text-align:center"> {% load staticfiles %}
+                            <br> <br>   <img src="{% static "img.gif" %}" alt="My image"/> <br><br><a class="navbar-brand container" href="#">
+                    <b style="background: #ff9933; color: whitesmoke ; padding: 10px;  width:100px"> Rent A Car.com</b>
+                </a>
+</div>
+                        <div class="col-md-6" >
+
+                            <form class="form-horizontal" method="POST" action="/login/">
+                                {% csrf_token %}
+
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    <input type="text" class="form-control" name="username" placeholder="Username" required autocomplete="email" autofocus>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" class="form-control" name="password" placeholder="Password" required autocomplete="current-password">
+                                </div>
+
+                                <div class="form-group mb-0">
+                                    <button type="submit" class="btn btn-success btn-block" name="submit">
+                                        Login
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

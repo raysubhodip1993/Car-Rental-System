@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="">
+    <!-- {% csrf_token %} -->
+    <title> Rent A Car.com - {% block title %}{% endblock %}</title>
+
+    <!-- Scripts -->
+    <script src="{% static 'public/js/app.js' %}"></script>
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    <!-- Styles -->
+    <link href="{% static 'public/css/app.css' %}" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+    <nav class="navbar navbar-expand-md bg-custom navbar-dark shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <b style="background: #ff9933; color: whitesmoke ; padding: 10px;"> Rent A Car</b>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Left Side Of Navbar -->
+                <ul class="navbar-nav mr-lg-auto">
+                    {% if request.session.user.type == 'c' %}
+                        <li class="nav-item btn">
+                            <a class="nav-link" href="/create-customer/">Create Customer</a>
+                        </li>
+                        <li class="nav-item btn">
+                            <a class="nav-link" href="/view-customers/">View Customers</a>
+                        </li>
+                        <li class="nav-item  btn">
+                            <a class="nav-link" href="/create-booking/">Create Booking</a>
+                        </li>
+                         <li class="nav-item  btn">
+                            <a class="nav-link" href="/view-reservation/">View Reservation</a>
+                        </li>
+                        <li class="nav-item  btn">
+                            <a class="nav-link" href="/create-reservation/">Create Reservation</a>
+                        </li>
+                        <li class="nav-item btn">
+                            <a class="nav-link" href="/view-bookings/">View Bookings</a>
+                        </li>
+                    {% endif %}
+                    {% if request.session.user.type == 'a' %}
+                        <li class="nav-item btn">
+                            <a class="nav-link" href="/create-employee/">Create Employee</a>
+                        </li>
+                        <li class="nav-item btn">
+                            <a class="nav-link" href="/add-vehicle/">Add to Catalog</a>
+                        </li>
+                        <li class="nav-item btn" style="border-left: white">
+                            <a class="nav-link" href="/view-employees/">View Employees</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item btn" style="border-left: white">
+                        <a class="nav-link" href="/view-catalog/">View Catalog</a>
+                    </li>
+                    {% if request.session.user.type == 'a' %}
+                        <li class="nav-item btn" style="border-left: white">
+                            <a class="nav-link" href="/view-transactions/">View Transaction</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <!-- Right Side Of Navbar -->
+                <ul class="navbar-nav ml-auto ">
+                    <!-- Authentication Links -->
+                    {% if request.session.user %}
+                        <li class="nav-item">
+                                <span class="navbar-text">
+                                  Signed In As:  <b>{{ request.session.user.first_name }} {{ request.session.user.last_name }}</b>
+                                </span>
+                        </li>
+                        <li class="nav-item ml-3 py-1">
+                            <a class="btn btn-sm  btn-danger align-middle" href="/logout/"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+
+                            <form id="logout-form" action="/logout/" method="POST" style="display: none;">
+                                {% csrf_token %}
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'homePage' %}">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="py-4">
+        <div class="container">
+
+            {% block content %}{% endblock %}
+
+        </div>
+    </main>
+</div>
+{% block vue %}{% endblock %}
+</body>
+</html>

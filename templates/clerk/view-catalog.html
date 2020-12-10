@@ -1,0 +1,197 @@
+{% extends "app-layout.html" %}
+
+{% block title %}View Catalog{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p><strong>Sort Table</strong></p>
+
+                    {% include "partials/sort-catalog-form.html" %}
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p><strong>Filter Table</strong></p>
+
+                    {% include "partials/filter-catalog-form.html" %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>View Catalog</b>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm">
+                        <thead>
+                        <tr>
+                            <th scope="col">Type</th>
+                            <th scope="col">Make</th>
+                            <th scope="col">Model</th>
+                            <th scope="col">Year</th>
+                            <th scope="col">Color</th>
+                            <th scope="col">Licence Plate</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <template v-if="filteredCatalog != null">
+                            <tr v-for="car in filteredCatalog">
+                                <td>[[ car.type ]]</td>
+                                <td>[[ car.brand ]]</td>
+                                <td>[[ car.model ]]</td>
+                                <td>[[ car.prod_year ]]</td>
+                                <td>[[ car.color ]]</td>
+                                <td>[[ car.license_plate ]]</td>
+                                <td class="w-25">
+                                    <a :href="'/view-vehicle?license='+car.license_plate" class="btn btn-sm btn-light">View
+                                        Vehicle</a>
+                                </td>
+                            </tr>
+                        </template>
+                        <tr v-else>
+                            <td class="text-center" colspan="7">No Cars Available in Catalog</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+    <script>
+        var app = new Vue({
+            delimiters: ['[[', ']]'],
+            el: '#app',
+            mounted() {
+                let driversLicenseMask = IMask(document.getElementById('licence-plate'), {
+                    mask: '### ###',
+                    definitions: {
+                        '#': /[a-zA-z0-9]/
+                    },
+                    prepare: function (str) {
+                        return str.toUpperCase();
+                    }
+                })
+            },
+            data() {
+                return {
+                    filteredCatalog: {{ cars|safe }},
+                    catalog: {{ cars|safe }},
+                    ftype: {},
+                    fbrand: {},
+                    fmodel: {},
+                    fyear: {},
+                    filterForm: new Form({
+                        type: '',
+                        brand: '',
+                        model: '',
+                        prod_year: 0,
+                        color: '',
+                        licence_plate: ''
+                    }),
+                    sortForm: new Form({
+                        criteria: '',
+                        order: ''
+                    })
+                }
+            },
+            created() {
+                String.prototype.unquoted = function () {
+                    return this.replace(/(^")|("$)/g, '')
+                }
+
+                this.catalog.forEach((val) => {
+                    let typeKey = JSON.stringify(val.type)
+                    let brandKey = JSON.stringify(val.brand)
+                    let modelKey = JSON.stringify(val.model)
+                    let yearKey = JSON.stringify(val.prod_year)
+
+                    this.ftype[typeKey] = (this.ftype[typeKey] || 0) + 1
+                    this.fbrand[brandKey] = (this.fbrand[brandKey] || 0) + 1
+                    this.fmodel[modelKey] = (this.fmodel[modelKey] || 0) + 1
+                    this.fyear[yearKey] = (this.fyear[yearKey] || 0) + 1
+                })
+            },
+            watch: {
+                'filterForm.type'(val) {
+                    if (val !== null && val !== "") {
+                        this.filteredCatalog = _.filter(this.catalog, function (obj) {
+                            return obj.type.indexOf(val.unquoted()) !== -1
+                        })
+                    } else {
+                        this.filteredCatalog = this.catalog
+                    }
+                },
+                'filterForm.brand'(val) {
+                    if (val !== null && val !== "") {
+                        this.filteredCatalog = _.filter(this.catalog, function (obj) {
+                            return obj.brand.indexOf(val.unquoted()) !== -1
+                        })
+                    } else {
+                        this.filteredCatalog = this.catalog
+                    }
+                },
+                'filterForm.model'(val) {
+                    if (val !== null && val !== "") {
+                        this.filteredCatalog = _.filter(this.catalog, function (obj) {
+                            return obj.model.indexOf(val.unquoted()) !== -1
+                        })
+                    } else {
+                        this.filteredCatalog = this.catalog
+                    }
+                },
+                'filterForm.prod_year'(val) {
+                    if (val !== null && val !== 0) {
+                        this.filteredCatalog = _.filter(this.catalog, function (obj) {
+                            let prod_year = obj.prod_year.toString()
+
+                            return prod_year.indexOf(val.unquoted()) !== -1
+                        })
+                    } else {
+                        this.filteredCatalog = this.catalog
+                    }
+                },
+                'filterForm.color'(val) {
+                    if (val !== null && val !== "") {
+                        console.log(val)
+                        this.filteredCatalog = _.filter(this.catalog, function (obj) {
+                            return obj.color.indexOf(val) !== -1
+                        })
+                    } else {
+                        this.filteredCatalog = this.catalog
+                    }
+                },
+                'filterForm.licence_plate'(val) {
+                    if (val !== null && val !== "") {
+                        this.filteredCatalog = _.filter(this.catalog, function (obj) {
+                            return obj.license_plate.indexOf(val) !== -1
+                        })
+                    } else {
+                        this.filteredCatalog = this.catalog
+                    }
+                }
+            },
+            methods: {
+                sortTable() {
+                    if (this.sortForm.order !== 'random') {
+                       this.filteredCatalog = _.orderBy(this.catalog, [this.sortForm.criteria], [this.sortForm.order])
+                    } else {
+                        this.filteredCatalog = _.shuffle(this.catalog)
+                    }
+                },
+                reset() {
+                    this.filteredCatalog = this.catalog
+
+                    this.filterForm.reset()
+                    this.sortForm.reset()
+                }
+            }
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "app-layout.html" %}
+
+{% block title %}View Employees{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p><strong>Filter Table</strong></p>
+                    {% include "partials/filter-employees-form.html" %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-white">
+                    <b>View Employees</b>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm">
+
+                        <thead>
+                        <tr>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Username</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <template v-if="filteredEmployees != null">
+                            <tr v-for="employee in filteredEmployees">
+                                <td>[[ employee.first_name ]]</td>
+                                <td>[[ employee.last_name ]]</td>
+                                <td>[[ employee.uname ]]</td>
+                                <td style="visibility:hidden;">[[ employee.emp_id ]]</td>
+                                <td class="w-25">
+                                    <a :href="'/view-employee-details?emp_id='+employee.emp_id"
+                                       class="btn btn-sm btn-light">View Employee</a>
+                                </td>
+                            </tr>
+                        </template>
+                        <tr v-else>
+                            <td class="text-center" colspan="5">No Employees Found</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block vue %}
+    <script>
+        var app = new Vue({
+            delimiters: ['[[', ']]'],
+            el: '#app',
+            data() {
+                return {
+                    filteredEmployees: {{ employees|safe }},
+                    employees: {{ employees|safe }},
+                    name: null,
+                    username: null
+                }
+            },
+            computed: {
+                employee() {
+                    return [this.name, this.username].join()
+                }
+            },
+            watch: {
+                employee() {
+                    this.filter()
+                }
+            },
+            methods: {
+                filter() {
+                    let name = this.name
+                    let username = this.username
+
+                    if (name !== null && name !== "") {
+                        this.filteredEmployees = _.filter(this.employees, function (obj) {
+                            return obj.first_name.indexOf(name) !== -1 || obj.last_name.indexOf(name) !== -1;
+                        });
+                    } else {
+                        this.filteredEmployees = this.employees;
+                    }
+
+                    if (username !== null && username !== "") {
+                        this.filteredEmployees = _.filter(this.employees, function (obj) {
+                            return obj.uname.indexOf(username) !== -1;
+                        });
+                    } else {
+                        this.filteredEmployees = this.employees;
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}

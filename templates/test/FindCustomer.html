@@ -1,0 +1,15 @@
+{% extends "app-layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+{% endblock %}
+{% block vue %}
+<form action="/findCust/" method='POST'>
+    {% csrf_token %}
+    Phone Number:<br>
+  <input type="text" name="phone_no" required="true" >
+  <br><br>
+  <input type="submit" value="Submit">
+{% endblock %}
